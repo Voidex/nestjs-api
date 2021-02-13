@@ -11,7 +11,7 @@ dotenv.config();
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async getByEmail(email: string): Promise<UserDocument | void > {
+  async getByEmail(email: string): Promise<UserDocument | void> {
     return this.userModel.findOne({ email });
   }
 
@@ -23,7 +23,7 @@ export class UserService {
     return this.userModel.create(userInput);
   }
 
-  async isUserExists(email: string): Promise<UserDocument| void> {
+  async isUserExists(email: string): Promise<UserDocument | void> {
     return this.getByEmail(email);
   }
 
@@ -31,7 +31,5 @@ export class UserService {
     return this.userModel.find();
   }
 
-  async updateUserAccountInfo(id: string, ): Promise<void> {
-
-  }
+  async updateUserAccountInfo(id: string): Promise<void> {}
 }

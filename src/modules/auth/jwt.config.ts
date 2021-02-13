@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export interface JwtAccessPayload {
-  sub: string 
+  sub: string;
 }
 
 export const jwtSecretKey = process.env.JWT_SECRET;
@@ -13,5 +13,3 @@ if (!jwtSecretKey) {
 }
 
 export const jwtExpiration = +process.env.JWT_ACCESS_TOKEN_EXPIRATION || 3600;
-
-

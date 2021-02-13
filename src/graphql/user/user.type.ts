@@ -20,5 +20,4 @@ export class User {
 
   @Field(type => Date)
   birthdate: Date;
-
 }

@@ -6,12 +6,12 @@ import { TokenModule } from '../token/token.module';
 import { JwtStrategy, STRATEGY_JWT } from './jwt.strategy';
 
 @Module({
-  imports:[
+  imports: [
     UserModule,
     TokenModule,
-    PassportModule.register({defaultStrategy: STRATEGY_JWT})
+    PassportModule.register({ defaultStrategy: STRATEGY_JWT }),
   ],
   providers: [AuthService, JwtStrategy],
-  exports: [AuthService]
+  exports: [AuthService],
 })
 export class AuthModule {}

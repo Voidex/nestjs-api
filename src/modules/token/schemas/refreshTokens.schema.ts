@@ -5,7 +5,6 @@ export type RefreshTokenDocument = RefreshToken & Document;
 
 @Schema()
 export class RefreshToken {
-
   @Prop({ required: true, ref: 'User' })
   userId: Types.ObjectId;
 

@@ -3,11 +3,7 @@ import { UserResolver } from './user.resolver';
 import { UserModule } from '../../modules/user/user.module';
 
 @Module({
-  imports: [
-    UserModule
-  ],
-  providers: [
-    UserResolver
-  ],
+  imports: [UserModule],
+  providers: [UserResolver],
 })
 export class UserGraphqlModule {}

@@ -7,25 +7,24 @@ const host: string = process.env.DB_HOST;
 const port: string = process.env.DB_PORT;
 const databaseName: string = process.env.DB_NAME;
 
-if(!user) {
+if (!user) {
   throw new Error('DB_USER param is not provided in .env file');
 }
 
-if(!password) {
+if (!password) {
   throw new Error('DB_PASSWORD param is not provided in .env file');
 }
 
-if(!host) {
+if (!host) {
   throw new Error('DB_HOST param is not provided in .env file');
 }
 
-if(!port) {
+if (!port) {
   throw new Error('DB_PORT param is not provided in .env file');
 }
 
-if(!databaseName) {
+if (!databaseName) {
   throw new Error('DB_NAME param is not provided in .env file');
 }
 
-
-export const initialConfig : string = `mongodb://${user}:${password}@${host}:${port}/?authSource=${databaseName}`;
+export const initialConfig: string = `mongodb://${user}:${password}@${host}:${port}/?authSource=${databaseName}`;

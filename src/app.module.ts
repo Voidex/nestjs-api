@@ -6,7 +6,6 @@ import { DatabaseModule } from './modules/database/database.module';
 import { join } from 'path';
 import { GraphqlResolversModule } from './graphql/resolvers.module';
 
-
 @Module({
   imports: [
     AuthModule,
@@ -14,7 +13,7 @@ import { GraphqlResolversModule } from './graphql/resolvers.module';
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: true,
-      debug: true
+      debug: true,
     }),
     UserModule,
     DatabaseModule,
@@ -22,5 +21,4 @@ import { GraphqlResolversModule } from './graphql/resolvers.module';
   controllers: [],
   providers: [],
 })
-
 export class AppModule {}

@@ -17,7 +17,7 @@ export class User {
   @Prop()
   password: string;
 
-  @Prop({lowercase: true, unique: true})
+  @Prop({ lowercase: true, unique: true })
   login: string;
 
   @Prop()

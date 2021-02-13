@@ -6,65 +6,67 @@ import { UserInput } from 'src/graphql/user/user.input';
 import { UserDocument } from '../user/schemas/user.schema';
 import { JwtAccessPayload } from './jwt.config';
 
-
 interface AuthResponse {
-  user: UserDocument,
-  accessToken: string,
-  refreshToken: string
+  user: UserDocument;
+  accessToken: string;
+  refreshToken: string;
 }
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly tokenService: TokenService
+    private readonly tokenService: TokenService,
   ) {}
 
   async register(userInput: UserInput): Promise<UserDocument> {
-
     const { email, password: rawPassword } = userInput;
 
-    if(!this.emailFormatIsValid(email)) {
+    if (!this.emailFormatIsValid(email)) {
       throw new BadRequestException('Wrong email address format!');
     }
 
     const userExists = await this.userService.isUserExists(email);
 
-    if(userExists) {
-      throw new BadRequestException('User with provided email is already exists');
+    if (userExists) {
+      throw new BadRequestException(
+        'User with provided email is already exists',
+      );
     }
 
-    if(!this.passwordLengthIsValid(rawPassword))  {
-      throw new BadRequestException('Password must be not less than 5 characters');
+    if (!this.passwordLengthIsValid(rawPassword)) {
+      throw new BadRequestException(
+        'Password must be not less than 5 characters',
+      );
     }
 
     const password = await this.hashUserPassword(rawPassword);
 
-    return  this.userService.createNewUser({ ...userInput, password });
-
+    return this.userService.createNewUser({ ...userInput, password });
   }
 
-  async login(email: string, password: string) : Promise<AuthResponse> {
+  async login(email: string, password: string): Promise<AuthResponse> {
     const user = await this.userService.getByEmail(email);
 
-    if(!user) {
+    if (!user) {
       throw new BadRequestException('User with provided email is not exist!');
     }
 
     const { password: passwordHash } = user;
 
-    const isPasswordValid = await this.compareUserPassword(password, passwordHash);
+    const isPasswordValid = await this.compareUserPassword(
+      password,
+      passwordHash,
+    );
 
-    if(!isPasswordValid) {
+    if (!isPasswordValid) {
       throw new BadRequestException('Provided password is wrong!');
     }
 
     return this.generateAuthResponse(user);
   }
 
-  async logout(): Promise<void> {
-
-  }
+  async logout(): Promise<void> {}
 
   async hashUserPassword(password: string): Promise<string> {
     const rounds = +process.env.SALT_ROUNDS || 12;
@@ -76,26 +78,27 @@ export class AuthService {
     return bcrypt.compare(password, hash);
   }
 
-  async getUserFromJwtPayload(payload: JwtAccessPayload): Promise<UserDocument | void> {
+  async getUserFromJwtPayload(
+    payload: JwtAccessPayload,
+  ): Promise<UserDocument | void> {
     const { sub: userId } = payload;
     return this.userService.getById(userId);
   }
 
-
   async generateTokens(user: UserDocument) {
     return Promise.all([
       this.tokenService.generateAccessToken(user),
-      this.tokenService.generateRefreshToken(user)
+      this.tokenService.generateRefreshToken(user),
     ]);
   }
 
   async generateAuthResponse(user: UserDocument): Promise<AuthResponse> {
-    const [ accessToken, refreshToken ] = await this.generateTokens(user);
+    const [accessToken, refreshToken] = await this.generateTokens(user);
     return {
       user,
       accessToken,
-      refreshToken
-    }
+      refreshToken,
+    };
   }
 
   passwordLengthIsValid(password: string): boolean {
@@ -103,6 +106,8 @@ export class AuthService {
   }
 
   emailFormatIsValid(email: string): boolean {
-    return email.search(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}/g) > -1;
+    return (
+      email.search(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}/g) > -1
+    );
   }
 }

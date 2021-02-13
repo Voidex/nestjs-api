@@ -4,12 +4,11 @@ import { User } from '../user/user.type';
 @ObjectType()
 export class AuthResponse {
   @Field(type => User)
-  user: User
+  user: User;
 
   @Field(type => String)
-  accessToken : string;
+  accessToken: string;
 
   @Field(type => String)
-  refreshToken : string;
-
+  refreshToken: string;
 }
