@@ -1,0 +1,15 @@
+version: '3.9'
+services: 
+  db:
+    image: mongo:latest
+    container_name: 'mongo-docker'
+    environment: 
+      - MONGO_INITDB_DATABASE=test
+      - MONGO_INITDB_ROOT_USERNAME=voidroot
+      - MONGO_INITDB_ROOT_PASSWORD=111111
+    volumes: 
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./mongo-volume:/data/db
+      - ./db/dump/:/dump/
+    ports:
+      - '27017-27019:27017-27019'
