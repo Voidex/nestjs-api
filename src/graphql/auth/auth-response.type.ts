@@ -12,3 +12,11 @@ export class AuthResponse {
   @Field(type => String)
   refreshToken: string;
 }
+
+@ObjectType()
+export class LogoutResponse {
+  @Field(type => Boolean)
+  result: boolean;
+
+}
+

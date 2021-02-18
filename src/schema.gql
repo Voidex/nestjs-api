@@ -22,6 +22,10 @@ type AuthResponse {
   refreshToken: String!
 }
 
+type LogoutResponse {
+  result: Boolean!
+}
+
 type Query {
   user(id: ID!): User!
   users: [User!]!
@@ -30,6 +34,8 @@ type Query {
 type Mutation {
   registerNewUser(user: UserInput!): User!
   login(password: String!, email: String!): AuthResponse!
+  refreshAccessToken(refreshToken: String!): AuthResponse!
+  logout: LogoutResponse!
 }
 
 input UserInput {

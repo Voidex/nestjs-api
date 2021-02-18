@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
 import { TokenService } from '../token/token.service';
 import { UserInput } from 'src/graphql/user/user.input';
-import { UserDocument } from '../user/schemas/user.schema';
-import { JwtAccessPayload } from './jwt.config';
+import { UserDocument, User } from '../user/schemas/user.schema';
+import { JwtAccessPayload, JwtRefreshPayload } from './jwt.config';
 
 interface AuthResponse {
   user: UserDocument;
@@ -66,7 +66,13 @@ export class AuthService {
     return this.generateAuthResponse(user);
   }
 
-  async logout(): Promise<void> {}
+  async renewAccessToken(refreshToken: string): Promise<AuthResponse> {
+    return this.tokenService.createAccessAndRefreshTokenFromRefreshToken(refreshToken);
+  }
+
+  async logout(user: UserDocument): Promise<{ result: boolean }> {
+    return this.tokenService.revokeAllUserRefreshTokens(user);
+  }
 
   async hashUserPassword(password: string): Promise<string> {
     const rounds = +process.env.SALT_ROUNDS || 12;
@@ -79,21 +85,17 @@ export class AuthService {
   }
 
   async getUserFromJwtPayload(
-    payload: JwtAccessPayload,
+    payload: JwtAccessPayload | JwtRefreshPayload,
   ): Promise<UserDocument | void> {
     const { sub: userId } = payload;
     return this.userService.getById(userId);
   }
 
-  async generateTokens(user: UserDocument) {
-    return Promise.all([
-      this.tokenService.generateAccessToken(user),
-      this.tokenService.generateRefreshToken(user),
-    ]);
-  }
 
   async generateAuthResponse(user: UserDocument): Promise<AuthResponse> {
-    const [accessToken, refreshToken] = await this.generateTokens(user);
+    const [accessToken, refreshToken] = await this.tokenService.generateTokens(
+      user,
+    );
     return {
       user,
       accessToken,

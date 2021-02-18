@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-export type RefreshTokenDocument = RefreshToken & Document;
+export interface RefreshTokenDocument extends RefreshToken, Document {}
 
 @Schema()
 export class RefreshToken {

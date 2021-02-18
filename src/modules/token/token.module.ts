@@ -5,8 +5,9 @@ import { jwtExpiration, jwtSecretKey } from '../auth/jwt.config';
 import {
   RefreshToken,
   RefreshTokenSchema,
-} from './schemas/refreshTokens.schema';
+} from './schemas/refresh-token.schema';
 import { TokenService } from './token.service';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -15,8 +16,11 @@ import { TokenService } from './token.service';
     ]),
     JwtModule.register({
       secret: jwtSecretKey,
-      signOptions: { expiresIn: jwtExpiration },
+      signOptions: {
+        expiresIn: jwtExpiration,
+      },
     }),
+    UserModule,
   ],
   providers: [TokenService],
   exports: [TokenService, JwtModule],

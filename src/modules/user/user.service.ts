@@ -16,7 +16,7 @@ export class UserService {
   }
 
   async getById(id: string): Promise<UserDocument | void> {
-    return this.userModel.findOne({ _id: id });
+    return this.userModel.findOne({ _id: id }, { password: false });
   }
 
   async createNewUser(userInput: UserInput): Promise<UserDocument> {

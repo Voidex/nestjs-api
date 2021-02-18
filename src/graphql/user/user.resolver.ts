@@ -9,14 +9,12 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(returns => User)
-  async user(
-    @Args('id', { type: () => ID }) id: string,
-  ): Promise<User | void> {
+  async user(@Args('id', { type: () => ID }) id: string): Promise<User | void> {
     return this.userService.getById(id);
   }
 
-  @Query(returns => [User])
   @UseGuards(GqlAuthGuard)
+  @Query(returns => [User])
   async users(): Promise<User[]> {
     return this.userService.getUsers();
   }
